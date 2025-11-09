@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:zap_list_flutter/models/product_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductController {
   final _controller = StreamController<List<Product>>.broadcast();
-  final _dio = Dio(BaseOptions(baseUrl: 'http://192.168.0.16:3000'));
+  final _dio = Dio(BaseOptions(baseUrl: dotenv.env['API_URL']?? 'http://localhost:3000'));
   List<Product>? _cache;
 
   Stream<List<Product>> get productStream => _controller.stream;

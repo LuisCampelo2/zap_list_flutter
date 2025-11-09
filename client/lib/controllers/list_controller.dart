@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:zap_list_flutter/models/shopping_list_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ListController {
   final _controller = StreamController<List<ShoppingList>>.broadcast();
-  final _dio = Dio(BaseOptions(baseUrl: 'http://192.168.0.16:3000'));
+  final _dio = Dio(BaseOptions(baseUrl: dotenv.env['API_URL']?? 'http://localhost:3000'));
   List<ShoppingList>? _cache;
 
   Stream<List<ShoppingList>> get listsStream => _controller.stream;

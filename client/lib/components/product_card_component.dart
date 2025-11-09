@@ -3,6 +3,7 @@ import 'package:zap_list_flutter/modals/lists_modal.dart';
 import 'package:zap_list_flutter/controllers/list_controller.dart';
 import 'package:zap_list_flutter/models/product_model.dart';
 import 'package:zap_list_flutter/models/shopping_list_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -19,13 +20,13 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              'http://192.168.0.16:3000/imgs/${product.photo}',
-              width: 148,
-              height: 148,
-              fit: BoxFit.cover,
-            ),
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                '${dotenv.env['API_URL']}/imgs/${product.photo}',
+                width: 148,
+                height: 148,
+                fit: BoxFit.cover,
+              )
           ),
           const SizedBox(height: 4),
           Text(
@@ -48,7 +49,7 @@ class ProductCard extends StatelessWidget {
               } catch (e) {
                 print("Erro ao buscar listas: $e");
               }
-              ListsModal.show(context, lists, productId,product);
+              ListsModal.show(context, lists, productId, product);
             },
             child: Text(
               'Adicionar à lista',
