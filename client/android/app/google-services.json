@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "55506097521",
+    "project_id": "zap-list-e46a4",
+    "storage_bucket": "zap-list-e46a4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55506097521:android:af241986a85d2ca0db92d0",
+        "android_client_info": {
+          "package_name": "com.example.zap_list_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55506097521-hb8vtquehd11fuvec2pu85u3d7gdo33b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.zap_list_flutter",
+            "certificate_hash": "134308e50e83c0223a89e43df42c7992b35e11de"
+          }
+        },
+        {
+          "client_id": "55506097521-7c2ub3hfjae5nocejvq2s5paa9crub4k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaNVfCUtoRr4NsgtMrtlq5CEIEq8oOSPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55506097521-7c2ub3hfjae5nocejvq2s5paa9crub4k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

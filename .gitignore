@@ -1,0 +1,72 @@
+# ====================
+# Flutter
+# ====================
+
+# Build outputs
+/build/
+**/build/
+
+# Dart/Pub related
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-version
+generated_plugin_registrant.dart
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# iOS
+ios/Flutter/Flutter.podspec
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+
+# Android
+android/.gradle/
+android/app/build/
+*.apk
+*.aab
+
+# Misc
+*.lock
+*.log
+
+# ====================
+# Node.js / Express
+# ====================
+
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+.env
+
+# Build
+dist/
+build/
+
+# IDEs
+.idea/
+.vscode/
+
+server/src/config/serviceAccountKey.json
