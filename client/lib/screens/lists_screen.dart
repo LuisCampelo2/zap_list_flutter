@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zap_list_flutter/controllers/list_controller.dart';
 import 'package:zap_list_flutter/modals/create_list_modal.dart';
 import 'package:zap_list_flutter/models/shopping_list_model.dart';
+import 'package:zap_list_flutter/models/shopping_list_product.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ListsScreen extends StatefulWidget {
   final User user;
@@ -15,6 +17,7 @@ class ListsScreen extends StatefulWidget {
 
 class _ListsScreenState extends State<ListsScreen> {
   List<ShoppingList> lists = [];
+  final Map<int, List<ShoppingListProduct>> listProducts = {};
   final ListController listController = ListController();
 
   @override
@@ -25,9 +28,9 @@ class _ListsScreenState extends State<ListsScreen> {
 
   void fetchData() async {
     try {
-      final res = await listController.fetchLists();
+      final resLists = await listController.fetchLists();
       setState(() {
-        lists = res;
+        lists = resLists;
       });
     } catch (e) {
       print('Erro ao buscar listas: $e');
@@ -38,38 +41,123 @@ class _ListsScreenState extends State<ListsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Minhas listas')),
-      body: Expanded(
-        child: Column(
-          children: [
-            lists.isEmpty
-                ? const Center(child: Text('Você ainda não possui listas'))
-                : Expanded(
-                    child: ListView.builder(
-                      itemCount: lists.length,
-                      itemBuilder: (context, index) {
-                        final list = lists[index];
-                        return ListTile(title: Text(list.name), onTap: () {});
-                      },
-                    ),
-                  ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                  vertical: 14,
+      body: Column(
+        children: [
+          SizedBox(
+            width: 266,
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Buscar Lista...',
+                prefixIcon: Icon(Icons.search),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 0,
+                  horizontal: 7,
                 ),
-                shape: RoundedRectangleBorder(
+                border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
                 ),
               ),
-              onPressed: () {
-                CreateListModal.show(context);
-              },
-              child: Text('Criar lista', style: TextStyle(color: Colors.white)),
             ),
-          ],
-        ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    CreateListModal.show(context);
+                  },
+                  child: const Text(
+                    'Criar lista',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: lists.isEmpty
+                ? const Center(child: Text('Você ainda não possui listas'))
+                : ListView.builder(
+                    itemCount: lists.length,
+                    itemBuilder: (context, index) {
+                      final list = lists[index];
+                      final products = listProducts[list.id] ?? [];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    final data = await listController
+                                        .fetchListProducts(list.id);
+                                    final fetchedProducts =
+                                        data['products']
+                                            as List<ShoppingListProduct>;
+                                    setState(() {
+                                      listProducts[list.id] = fetchedProducts;
+                                    });
+                                  },
+                                  child: Text(
+                                    list.name,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                const Icon(
+                                  Icons.chevron_right,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 60,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: products.length,
+                              itemBuilder: (context, productIndex) {
+                                final shoppingListProduct =
+                                    products[productIndex];
+                                final product = shoppingListProduct.product;
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: product != null
+                                      ? Image.network(
+                                          '${dotenv.env['API_URL']}/imgs/${product.photo}',
+                                          width: 40,
+                                          height: 40,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Icon(
+                                          Icons.image_not_supported,
+                                          size: 40,
+                                        ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
     );
   }

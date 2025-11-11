@@ -4,8 +4,8 @@ class Product {
   final String photo;
   final String category;
   final double? price;
-  final String? unitOfMeasure; // agora como String
-  final String? unitOfCalculation; // agora como String
+  final String? unitOfMeasure;
+  final String? unitOfCalculation;
   final double? averageWeight;
 
   Product({

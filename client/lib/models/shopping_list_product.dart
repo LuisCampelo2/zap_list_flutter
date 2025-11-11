@@ -8,8 +8,8 @@ class ShoppingListProduct {
   final int shoppingListId;
   final int productId;
   final String? observation;
-  final Product product;
-  final ShoppingList shoppingList;
+  final Product? product;
+  final ShoppingList? shoppingList;
 
   ShoppingListProduct({
     required this.id,
@@ -18,33 +18,33 @@ class ShoppingListProduct {
     required this.shoppingListId,
     required this.productId,
     this.observation,
-    required this.product,
-    required this.shoppingList,
+    this.product,
+    this.shoppingList,
   });
 
-  factory ShoppingListProduct.fromJson(Map<String, dynamic> json) {
-    return ShoppingListProduct(
-      id: json['id'],
-      quantity: json['quantity'],
-      isChecked: json['isChecked'],
-      shoppingListId: json['shoppingListId'],
-      productId: json['productId'],
-      observation: json['observation'],
-      product: Product.fromJson(json['Product']),
-      shoppingList: ShoppingList.fromJson(json['ShoppingList']),
-    );
-  }
+  factory ShoppingListProduct.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return ShoppingListProduct(
+        id: 0,
+        isChecked: false,
+        shoppingListId: 0,
+        productId: 0,
+      );
+    }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'quantity': quantity,
-      'isChecked': isChecked,
-      'shoppingListId': shoppingListId,
-      'productId': productId,
-      'observation': observation,
-      'Product': product.toJson(),
-      'ShoppingList': shoppingList.toJson(),
-    };
+    return ShoppingListProduct(
+      id: json['id'] ?? 0,
+      quantity: json['quantity'],
+      isChecked: json['isChecked'] ?? false,
+      shoppingListId: json['shoppingListId'] ?? 0,
+      productId: json['productId'] ?? 0,
+      observation: json['observation'],
+      product: json['Product'] != null
+          ? Product.fromJson(json['Product'])
+          : null,
+      shoppingList: json['ShoppingList'] != null
+          ? ShoppingList.fromJson(json['ShoppingList'])
+          : null,
+    );
   }
 }

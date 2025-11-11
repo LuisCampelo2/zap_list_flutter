@@ -10,10 +10,18 @@ class ShoppingList {
   });
 
   factory ShoppingList.fromJson(Map<String, dynamic> json) {
+    final totalPriceValue = json['totalPrice'];
+
+    double parseTotalPrice(dynamic value) {
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 0.0;
+      return 0.0;
+    }
+
     return ShoppingList(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
-      totalPrice: (json['totalPrice'] ?? 0).toDouble(),
+      totalPrice: parseTotalPrice(totalPriceValue),
     );
   }
 

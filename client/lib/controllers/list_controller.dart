@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:zap_list_flutter/models/shopping_list_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:zap_list_flutter/models/shopping_list_product.dart';
 
 class ListController {
   final _controller = StreamController<List<ShoppingList>>.broadcast();
@@ -85,6 +86,32 @@ class ListController {
         print('erro ao adicionar produto');
     }
   }
+
+  Future<Map<String, dynamic>> fetchListProducts(int id) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      final idToken = await user!.getIdToken();
+
+      final res = await _dio.get(
+        '/api/list/$id/productsList',
+        options: Options(
+          headers: {'Authorization': 'Bearer $idToken'},
+          extra: {'withCredentials': true},
+        ),
+      );
+
+      return {
+        'products': (res.data['products'] as List)
+            .map((json) => ShoppingListProduct.fromJson(json))
+            .toList(),
+        'list': ShoppingList.fromJson(res.data['list']),
+      };
+    } catch (e) {
+      print('Erro ao buscar produtos da lista: $e');
+      rethrow;
+    }
+  }
+
 
   void dispose() => _controller.close();
 }
