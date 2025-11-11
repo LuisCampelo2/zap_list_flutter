@@ -93,13 +93,15 @@ class _ListsScreenState extends State<ListsScreen> {
                     itemBuilder: (context, index) {
                       final list = lists[index];
                       final products = listProducts[list.id] ?? [];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 12,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
                                 GestureDetector(
                                   onTap: () async {
@@ -112,47 +114,70 @@ class _ListsScreenState extends State<ListsScreen> {
                                       listProducts[list.id] = fetchedProducts;
                                     });
                                   },
-                                  child: Text(
-                                    list.name,
-                                    style: const TextStyle(fontSize: 16),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        list.name,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      const Icon(
+                                        Icons.chevron_right,
+                                        size: 20,
+                                        color: Colors.black,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(width: 4),
-                                const Icon(
-                                  Icons.chevron_right,
-                                  color: Colors.black,
-                                  size: 20,
+                                const Spacer(),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    size: 18,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                          Container(
-                            height: 60,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: products.length,
-                              itemBuilder: (context, productIndex) {
-                                final shoppingListProduct =
-                                    products[productIndex];
-                                final product = shoppingListProduct.product;
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: product != null
-                                      ? Image.network(
-                                          '${dotenv.env['API_URL']}/imgs/${product.photo}',
-                                          width: 40,
-                                          height: 40,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Icon(
-                                          Icons.image_not_supported,
-                                          size: 40,
-                                        ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
+                            if (products.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4),
+                                // 🔹 Aproxima imagens do título
+                                child: SizedBox(
+                                  height: 50,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: products.length,
+                                    itemBuilder: (context, productIndex) {
+                                      final shoppingListProduct =
+                                          products[productIndex];
+                                      final product =
+                                          shoppingListProduct.product;
+                                      return Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: product != null
+                                            ? Image.network(
+                                                '${dotenv.env['API_URL']}/imgs/${product.photo}',
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : const Icon(
+                                                Icons.image_not_supported,
+                                                size: 40,
+                                              ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       );
                     },
                   ),
